@@ -4,6 +4,8 @@ import com.code.product.model.Product;
 import com.code.product.repository.ProductRepository;
 import com.code.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -11,8 +13,8 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
 
     @Override
-    public Iterable<Product> findAll() {
-        return productRepository.findAll();
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     @Override
@@ -28,5 +30,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void remove(Long id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Product> findAllByProduct_nameEquals(String s, Pageable pageable) {
+        return productRepository.findAllByProductname(s, pageable);
     }
 }

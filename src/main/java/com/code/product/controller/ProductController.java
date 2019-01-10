@@ -5,15 +5,19 @@ import com.code.product.model.Product;
 import com.code.product.service.CategoryService;
 import com.code.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 @Controller
 public class ProductController {
+
+    private static String stringSave = "";
 
     @Autowired
     private ProductService productService;
@@ -27,10 +31,18 @@ public class ProductController {
     }
 
     @GetMapping("products")
-    public ModelAndView showListForm(){
-        Iterable<Product> products = productService.findAll();
+    public ModelAndView showListForm(@PageableDefault(5) Pageable pageable, @RequestParam("s") Optional<String> s){
+        Page<Product> products;
+        stringSave = s.toString().substring(9,s.toString().length()-1);
+        if (stringSave.equals("empt")) stringSave = "";
+        if (!stringSave.equals("")){
+            products = productService.findAllByProduct_nameEquals(stringSave, pageable);
+        }else{
+            products = productService.findAll(pageable);
+        }
         ModelAndView modelAndView = new ModelAndView("product/list");
         modelAndView.addObject("products", products);
+        modelAndView.addObject("stringSave", stringSave);
         return modelAndView;
     }
 
@@ -76,7 +88,7 @@ public class ProductController {
         return modelAndView;
     }
 
-    @PostMapping("/detele-product")
+    @PostMapping("/delete-product")
     public String deleteProduct(@ModelAttribute("product") Product product){
         productService.remove(product.getId());
         return "redirect:products";

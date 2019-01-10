@@ -15,7 +15,7 @@ public class Product {
     private String product_code;
 
     @NotEmpty
-    private String product_name;
+    private String productname;
 
     @Min(0)
     private double price;
@@ -41,7 +41,7 @@ public class Product {
 
     public Product(@NotEmpty String product_code, @NotEmpty String product_name, @Min(0) double price, @NotEmpty String company, @NotEmpty String producted, @NotEmpty String description, @Min(0) int discount, Category category) {
         this.product_code = product_code;
-        this.product_name = product_name;
+        this.productname = product_name;
         this.price = price;
         this.company = company;
         this.producted = producted;
@@ -66,12 +66,12 @@ public class Product {
         this.product_code = product_code;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public String getProductname() {
+        return productname;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setProductname(String productname) {
+        this.productname = productname;
     }
 
     public double getPrice() {
